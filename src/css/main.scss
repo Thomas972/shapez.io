@@ -42,6 +42,7 @@
 @import "ingame_hud/pinned_shapes";
 @import "ingame_hud/notifications";
 @import "ingame_hud/settings_menu";
+@import "ingame_hud/debug_menu";
 @import "ingame_hud/debug_info";
 @import "ingame_hud/entity_debugger";
 @import "ingame_hud/tutorial_hints";
@@ -90,6 +91,7 @@ ingame_HUD_Statistics,
 ingame_HUD_ShapeViewer,
 ingame_HUD_UnlockNotification,
 ingame_HUD_SettingsMenu,
+ingame_HUD_DebugMenu,
 ingame_HUD_ModalDialogs;
 
 $zindex: 100;

@@ -48,6 +48,7 @@
         "lz-string": "^1.4.4",
         "markdown-loader": "^4.0.0",
         "match-all": "^1.2.5",
+        "peerjs": "^1.3.1",
         "phonegap-plugin-mobile-accessibility": "^1.0.5",
         "promise-polyfill": "^8.1.0",
         "query-string": "^6.8.1",

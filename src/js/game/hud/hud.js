@@ -24,6 +24,7 @@ import { HUDPinnedShapes } from "./parts/pinned_shapes";
 import { ShapeDefinition } from "../shape_definition";
 import { HUDNotifications, enumNotificationType } from "./parts/notifications";
 import { HUDSettingsMenu } from "./parts/settings_menu";
+import { HUDDebugMenu } from "./parts/debug_menu";
 import { HUDDebugInfo } from "./parts/debug_info";
 import { HUDEntityDebugger } from "./parts/entity_debugger";
 import { KEYMAPPINGS } from "../key_action_mapper";
@@ -75,6 +76,7 @@ export class GameHUD {
             pinnedShapes: new HUDPinnedShapes(this.root),
             notifications: new HUDNotifications(this.root),
             settingsMenu: new HUDSettingsMenu(this.root),
+            debugMenu: new HUDDebugMenu(this.root),
             // betaOverlay: new HUDBetaOverlay(this.root),
             debugInfo: new HUDDebugInfo(this.root),
             dialogs: new HUDModalDialogs(this.root),

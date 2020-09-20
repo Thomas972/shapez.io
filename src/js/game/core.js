@@ -17,6 +17,7 @@ import { Rectangle } from "../core/rectangle";
 import { ORIGINAL_SPRITE_SCALE } from "../core/sprites";
 import { lerp, randomInt, round2Digits } from "../core/utils";
 import { Vector } from "../core/vector";
+import { PeerClient } from "../peering/peer_client";
 import { Savegame } from "../savegame/savegame";
 import { SavegameSerializer } from "../savegame/savegame_serializer";
 import { AutomaticSave } from "./automatic_save";
@@ -181,7 +182,13 @@ export class GameCore {
         const serializer = new SavegameSerializer();
 
         try {
-            const status = serializer.deserialize(this.root.savegame.getCurrentDump(), this.root);
+            var save = null;
+            if (this.root.app.peer instanceof PeerClient) {
+                save = this.root.app.peer.map;
+            } else {
+                save = this.root.savegame.getCurrentDump();
+            }
+            const status = serializer.deserialize(save, this.root);
             if (!status.isGood()) {
                 logger.error("savegame-deserialize-failed:" + status.reason);
                 return false;

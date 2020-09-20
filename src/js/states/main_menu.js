@@ -302,6 +302,13 @@ export class MainMenuState extends GameState {
                 T.mainMenu.newGame
             );
             this.trackClicks(newGameButton, this.onPlayButtonClicked);
+
+            const joinGameButton = makeButton(
+                this.htmlElement.querySelector(".mainContainer .outer"),
+                ["joinGameButton", "styledButton"],
+                "Join game"
+            );
+            this.trackClicks(joinGameButton, this.onJoinButtonClicked);
         } else {
             // New game
             const playBtn = makeButton(buttonContainer, ["playButton", "styledButton"], T.mainMenu.play);
@@ -572,6 +579,12 @@ export class MainMenuState extends GameState {
             });
             this.app.analytics.trackUiClick("startgame_adcomplete");
         });
+    }
+
+    onJoinButtonClicked() {
+        const setting = /** @type {EnumSetting} */ (getApplicationSettingById("language"));
+
+        const { optionSelected } = this.dialogs.showJoinGameDialog("Joing game", this);
     }
 
     onContinueButtonClicked() {

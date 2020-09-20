@@ -80,6 +80,10 @@
                 pointer-events: none;
                 cursor: default;
             }
+
+            &.debug {
+                background-image: uiResource("icons/debug.png");
+            }
         }
 
         &.settings {

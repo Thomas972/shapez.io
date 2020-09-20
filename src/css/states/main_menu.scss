@@ -278,6 +278,12 @@
             @include S(margin-left, 15px);
         }
 
+        .joinGameButton {
+            @include IncreasedClickArea(0px);
+            @include S(margin-top, 15px);
+            @include S(margin-left, 15px);
+        }
+
         .savegames {
             @include S(max-height, 105px);
             overflow-y: auto;

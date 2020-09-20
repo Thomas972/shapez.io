@@ -86,9 +86,11 @@ export class HUDGameMenu extends BaseHUDPart {
 
         this.saveButton = makeDiv(this.element, null, ["button", "save", "animEven"]);
         this.settingsButton = makeDiv(this.element, null, ["button", "settings"]);
+        this.debugButton = makeDiv(this.element, null, ["button", "debug"]);
 
         this.trackClicks(this.saveButton, this.startSave);
         this.trackClicks(this.settingsButton, this.openSettings);
+        this.trackClicks(this.debugButton, this.debug);
     }
 
     initialize() {
@@ -170,5 +172,9 @@ export class HUDGameMenu extends BaseHUDPart {
 
     openSettings() {
         this.root.hud.parts.settingsMenu.show();
+    }
+
+    debug() {
+        this.root.hud.parts.debugMenu.show();
     }
 }

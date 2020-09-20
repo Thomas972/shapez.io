@@ -8,6 +8,8 @@ import { KeyActionMapper } from "../game/key_action_mapper";
 import { Savegame } from "../savegame/savegame";
 import { GameCore } from "../game/core";
 import { MUSIC } from "../platform/sound";
+import { PeerHost } from "../peering/peer_host";
+import { PeerClient } from "../peering/peer_client";
 
 const logger = createLogger("state/ingame");
 
@@ -237,6 +239,9 @@ export class InGameState extends GameState {
     stage4aInitEmptyGame() {
         if (this.switchStage(stages.s4_A_initEmptyGame)) {
             this.core.initNewGame();
+            if (!(this.app.peer instanceof PeerClient)) {
+                new PeerHost(this.core.root, this.app);
+            }
             this.stage5FirstUpdate();
         }
     }
@@ -251,6 +256,12 @@ export class InGameState extends GameState {
                 return;
             }
             this.app.gameAnalytics.handleGameResumed();
+            if (!(this.app.peer instanceof PeerClient)) {
+                new PeerHost(this.core.root, this.app);
+            } else {
+                this.app.peer.root = this.core.root;
+                this.app.peer.app = this.app;
+            }
             this.stage5FirstUpdate();
         }
     }

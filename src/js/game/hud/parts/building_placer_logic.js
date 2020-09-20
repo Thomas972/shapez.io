@@ -304,6 +304,20 @@ export class HUDBuildingPlacerLogic extends BaseHUDPart {
         if (contents) {
             if (this.root.logic.tryDeleteBuilding(contents)) {
                 this.root.soundProxy.playUi(SOUNDS.destroyBuilding);
+                this.root.app.peer.sendAction("delete", tile, null, null, null);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Tries to delete the building under the mouse
+     */
+    remoteDeleteAtPosition(tile) {
+        const contents = this.root.map.getTileContent(tile, this.root.currentLayer);
+        if (contents) {
+            if (this.root.logic.tryDeleteBuilding(contents)) {
                 return true;
             }
         }
@@ -391,6 +405,34 @@ export class HUDBuildingPlacerLogic extends BaseHUDPart {
         }
     }
 
+    remotePlaceCurrentBuildingAt(tile, metaBuilding, variant, remoteRotation) {
+        const { rotation, rotationVariant } = metaBuilding.computeOptimalDirectionAndRotationVariantAtTile({
+            root: this.root,
+            tile,
+            rotation: remoteRotation,
+            variant: variant,
+            layer: metaBuilding.getLayer(),
+        });
+
+        const entity = this.root.logic.tryPlaceBuilding({
+            origin: tile,
+            rotation,
+            rotationVariant,
+            originalRotation: remoteRotation,
+            building: metaBuilding,
+            variant: variant,
+        });
+
+        if (entity) {
+            // Succesfully placed, find which entity we actually placed
+            this.root.signals.entityManuallyPlaced.dispatch(entity);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Tries to place the current building at the given tile
      * @param {Vector} tile
@@ -400,6 +442,8 @@ export class HUDBuildingPlacerLogic extends BaseHUDPart {
             // Dont allow placing in overview mode
             return;
         }
+
+        let rotationToSend = this.currentBaseRotation;
 
         const metaBuilding = this.currentMetaBuilding.get();
         const { rotation, rotationVariant } = metaBuilding.computeOptimalDirectionAndRotationVariantAtTile({
@@ -442,6 +486,13 @@ export class HUDBuildingPlacerLogic extends BaseHUDPart {
                 // Stop placement
                 this.currentMetaBuilding.set(null);
             }
+            this.root.app.peer.sendAction(
+                "put",
+                tile,
+                metaBuilding,
+                this.currentVariant.get(),
+                rotationToSend
+            );
             return true;
         } else {
             return false;
@@ -731,6 +782,7 @@ export class HUDBuildingPlacerLogic extends BaseHUDPart {
                         const contents = this.root.map.getLayerContentXY(x0, y0, this.root.currentLayer);
                         if (contents && !contents.queuedForDestroy && !contents.destroyed) {
                             if (this.root.logic.tryDeleteBuilding(contents)) {
+                                this.root.app.peer.sendAction("delete", newPos, null, null, null);
                                 anythingDeleted = true;
                             }
                         }

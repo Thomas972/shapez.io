@@ -69,6 +69,7 @@ export class Application {
         this.savegameMgr = new SavegameManager(this);
         this.inputMgr = new InputDistributor(this);
         this.backgroundResourceLoader = new BackgroundResourcesLoader(this);
+        this.peer = null;
 
         // Platform dependent stuff
 

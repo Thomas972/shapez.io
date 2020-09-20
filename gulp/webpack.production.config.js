@@ -162,6 +162,10 @@ module.exports = ({
                 cwd: path.join(__dirname, "..", "src", "js"),
                 patterns: ["../src/js/**/*.js"],
             }),
+
+            new webpack.ProvidePlugin({
+                Peer: ["peerjs", "default"],
+            }),
         ],
         module: {
             rules: [

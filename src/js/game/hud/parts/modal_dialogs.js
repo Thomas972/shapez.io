@@ -5,10 +5,17 @@ import { Application } from "../../../application";
 import { SOUNDS } from "../../../platform/sound";
 import { DynamicDomAttach } from "../dynamic_dom_attach";
 import { BaseHUDPart } from "../base_hud_part";
-import { Dialog, DialogLoading, DialogOptionChooser } from "../../../core/modal_dialog_elements";
+import {
+    Dialog,
+    DialogLoading,
+    DialogOptionChooser,
+    DialogWithForm,
+} from "../../../core/modal_dialog_elements";
+import { FormElementInput } from "../../../core/modal_dialog_forms";
 import { makeDiv } from "../../../core/utils";
 import { T } from "../../../translations";
 import { THIRDPARTY_URLS } from "../../../core/config";
+import { PeerClient } from "../../../peering/peer_client";
 
 export class HUDModalDialogs extends BaseHUDPart {
     constructor(root, app) {
@@ -135,6 +142,28 @@ export class HUDModalDialogs extends BaseHUDPart {
             options,
         });
         this.internalShowDialog(dialog);
+        return dialog.buttonSignals;
+    }
+
+    showJoinGameDialog(title, mainMenu) {
+        const hostNameInput = new FormElementInput({
+            id: "host",
+            label: "Host",
+            placeholder: "",
+            defaultValue: "",
+        });
+
+        const dialog = new DialogWithForm({
+            app: this.app,
+            title: title,
+            desc: "",
+            formElements: [hostNameInput],
+        });
+        this.internalShowDialog(dialog);
+
+        dialog.buttonSignals.ok.add(() => {
+            new PeerClient(this.root, this.app, hostNameInput.getValue(), mainMenu);
+        });
         return dialog.buttonSignals;
     }
 

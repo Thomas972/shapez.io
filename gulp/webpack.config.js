@@ -59,6 +59,9 @@ module.exports = ({ watch = false, standalone = false }) => {
                 // set the current working directory for displaying module paths
                 cwd: path.join(__dirname, "..", "src", "js"),
             }),
+            new webpack.ProvidePlugin({
+                Peer: ["peerjs", "default"],
+            }),
         ],
         module: {
             rules: [
